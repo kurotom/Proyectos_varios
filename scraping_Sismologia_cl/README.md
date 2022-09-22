@@ -1,5 +1,5 @@
 # sismologia_scraping
-Datos obtenidos de [http://www.sismologia.cl/](http://www.sismologia.cl/), se puede guardar los datos en un ficheros `.csv`.
+Datos obtenidos de [http://www.sismologia.cl/](http://www.sismologia.cl/), se puede guardar los datos en un fichero `.csv`.
 
 Utiliza driver [geckodriver - 0.31.0](https://github.com/mozilla/geckodriver/releases).
 
