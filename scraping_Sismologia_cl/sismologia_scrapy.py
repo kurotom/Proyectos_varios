@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 
+from time import sleep
+import requests
 from bs4 import BeautifulSoup
 from uuid import uuid4
 import datetime
@@ -24,19 +25,11 @@ class SismologiaData(object):
     def run(self):
         self.date = int(datetime.datetime.now().timestamp())
 
-        opciones = Options()
-        opciones.headless = True
+        sleep(1)
 
-        serviceObject = Service(self.agente)
+        infoResponse = requests.get(self.url)
 
-        driver = webdriver.Firefox(options=opciones, service=serviceObject)
-        driver.get(self.url)
-
-        sleep(3)
-
-        page = driver.page_source
-
-        s = BeautifulSoup(page, 'html.parser')
+        s = BeautifulSoup(infoResponse.content, 'html.parser')
 
         t = s.find('table', 'sismologia')
         tr = t.find_all('tr')
@@ -49,13 +42,13 @@ class SismologiaData(object):
                 self.dataDict.update({id: [linkMapa]})
 
         for element in self.dataDict:
-            info = self.dataDict[element].pop()
+            linkData = self.dataDict[element].pop()
 
-            driver.get(info)
+            dataDetailResponse = requests.get(linkData)
 
-            sleep(3)
+            sleep(1)
 
-            s = BeautifulSoup(driver.page_source, 'html.parser')
+            s = BeautifulSoup(dataDetailResponse.content, 'html.parser')
             tabla = s.find('table', "sismologia informe")
             trs = tabla.find_all('tr')
 
@@ -70,12 +63,11 @@ class SismologiaData(object):
                     td = trs[l].find_all('td')
                     infoDetail.append(td[1].text.strip())
 
-            urlIMG = info[:-4] + 'jpeg'
+            urlIMG = linkData[:-4] + 'jpeg'
             infoDetail.append(urlIMG)
 
             self.resultado.append(infoDetail)
 
-        driver.close()
 
     def write(self):
         keysData = [

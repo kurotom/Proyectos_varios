@@ -5,7 +5,7 @@ Utiliza driver [geckodriver - 0.31.0](https://github.com/mozilla/geckodriver/rel
 
 
 ## Requisitos
-* selenium==4.1.3
+* requests==2.27.1
 * beautifulsoup4==4.11.0
 
 
