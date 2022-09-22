@@ -24,6 +24,6 @@ $ python sismologia_scraping.py
 ```
 
 
-Los datos se guardarán en un fichero '.csv' en el formato: `sismologia-[timestamp].csv`.
+Formato del fichero '.csv': `sismologia-[timestamp].csv`.
 
-Dicho 'timestamp' es del momento de la realización de la consulta de los datos.
+Dicho 'timestamp' es del momento de la consulta de los datos.
