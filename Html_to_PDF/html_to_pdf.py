@@ -8,12 +8,14 @@ import sys
 
 
 def proceso(lista):
-    print(lista)
     for item in lista:
-        listaItem = list(item.items())[0]
-        if "?" in item:
-            continue
-        pdfkit.from_url(listaItem[1], listaItem[0])
+        try:
+            key = list(items.keys())
+            if "?" in item:
+                continue
+            pdfkit.from_url(item[key[0]], key[0])
+        except:
+            pass
 
 
 lista_tupla = []

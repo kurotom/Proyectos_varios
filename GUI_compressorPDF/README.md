@@ -1,21 +1,18 @@
 # Simple Compressor PDF
-- Es un programa simple y básico, que reduce el "peso" de los archivos pdfs.
+Es un programa simple que reduce el "peso" de los archivos pdfs sin perder la calidad, con entorno gráfico.
 
 ## Dependencias:
 Se necesita instalar en tu máquina.
 
-- Python
-			https://www.python.org/downloads/
-
-- Ghostscript		
-			https://www.ghostscript.com/download/gsdnld.html
+- [Python](https://www.python.org/downloads/)
 
 
+- [Ghostscript](https://www.ghostscript.com/download/gsdnld.html)
 
-## Uso:
+
+
+## Ejecutar el programa
+
 ```
-	shell
-
-	# python simple_compresor_pdf.py
-
+$ python simple_compresor_pdf.py
 ```
