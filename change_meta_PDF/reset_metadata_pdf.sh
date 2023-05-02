@@ -2,7 +2,7 @@
 # kurotom
 
 usage() {
-	echo -e "\n\t$0 -f pdf_original.pdf [ t | a | s | k | c | p ]\n"
+	echo -e "\n\t$0 [ t | a | s | k | c | p ] -f pdf_original.pdf \n"
 	echo -e """\tOptions:\n
 	\t-t title
 	\t-a author
@@ -21,24 +21,21 @@ runProgram() {
 
 	echo -e "\n$original --> $final"
 
-	marcas="""
- 			[ /Title ($title)
-  		/Author ($author)
-	    /Subject ($subject)
-	    /Keywords ($keywords)
- 	    /ModDate (D:$now)
-	    /CreationDate (D:$now)
-			/Creator ($creator)
-			/Producer ($producer)
-	    /DOCINFO pdfmark
+	marcas="""[ /Title ("$title")
+		/Author ("$author")
+		/Subject ("$subject")
+		/Keywords ("$keywords")
+		/ModDate (D:"$now")
+		/CreationDate (D:"$now")
+		/Creator ("$creator")
+		/Producer ("$producer")
+		/DOCINFO pdfmark
 	"""
 
 	linkFile=$(readlink -f "$file")
 
 	if [[ -f $linkFile ]]; then
-
-		gs -q -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile="$final" "$original" -c $marcas
-
+		gs -q -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile="$final" "$original" -c "$marcas"
 	else
 		echo -e "\a\nFichero origen no existe.\n"
 	fi
@@ -86,7 +83,6 @@ while getopts :f:t:a:s:k:c:p: opcion ; do
 			;;
 	esac
 done
-
 
 if [[ ${file} != "" ]]; then
 	runProgram
