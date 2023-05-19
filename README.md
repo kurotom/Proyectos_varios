@@ -1,4 +1,4 @@
-# Proyectos
+# Tic_Tac_Toe
+Simple juego Tic Tac Toe.
 
-Una simple caja de todos los proyectos que realizo.
-
+Escrito en Python.
