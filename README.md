@@ -1,4 +1,2 @@
-# Proyectos
-
-Una simple caja de todos los proyectos que realizo.
-
+# Caffee_Machine
+Simula una maquina de café.
