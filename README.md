@@ -1,4 +1,2 @@
-# Proyectos
-
-Una simple caja de todos los proyectos que realizo.
-
+# Hangman_Game
+Un juego hangman simple.
