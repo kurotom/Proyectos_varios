@@ -11,6 +11,9 @@ class AutoUpdate(object):
     url = 'https://api.curseforge.com'
 
     def __init__(self, key=None, version=None):
+        """
+        Constructor AutoUpdate
+        """
         self.mods_update = []
 
         self.key = key
@@ -28,18 +31,27 @@ class AutoUpdate(object):
         self.indice = 0
 
     def checkKey(self, key):
+        """
+        Verifica la existencia y el tamaño de la llave API.
+        """
         if key != "" and len(key) == 60:
             return True
         else:
             return False
 
     def setKeyApi(self, key_api=""):
+        """
+        Establece la llave de API.
+        """
         if self.checkKey(key_api):
             self.key = key_api
         else:
             raise ValueError('Key is empty or no longer length.')
 
     def headers(self):
+        """
+        Retorna header de la petición.
+        """
         if self.key is not None:
             headers = {
                 'single': {
@@ -58,6 +70,9 @@ class AutoUpdate(object):
             return None
 
     def load_txt(self, path_file_txt):
+        """
+        Carga el fichero TXT y busca por cada línea.
+        """
         try:
             file_txt = os.path.abspath(path_file_txt)
             with open(file_txt, 'r') as file:
@@ -87,9 +102,14 @@ class AutoUpdate(object):
                                 ).strip()
                         else:
                             self.current_mod = " ".join(map(str, reg))
-    #########
-                        # print(reg, self.current_mod, filename)
+
                         sleep(1)
+
+                        ltiempo = f'{self.tiempo()}'
+                        lbody = '  Searching     ---  '
+                        lcurrent = f'{self.current_mod}'
+                        print(ltiempo + lbody + lcurrent)
+
                         self.search(
                                 self.current_mod,
                                 filename
@@ -98,14 +118,14 @@ class AutoUpdate(object):
             print('\nInterrumpido por el usuario')
 
     def search(self, mod_string=None, fileModOrigin=None, indice=0):
-        """Search by filename mod"""
+        """
+        Busca por nombre del mod.
+        """
         if self.key is None:
             raise ValueError('Key API no establecida.')
         else:
             if mod_string is not None:
                 self.current_mod = mod_string.strip()
-
-            print(f'{self.tiempo()}  Searching     ---  {self.current_mod}')
 
             parametros = {
                 'gameId': 432,
@@ -129,45 +149,39 @@ class AutoUpdate(object):
 
             self.resultados = resJSON['data']
 
+            if len(self.resultados) == 0:
+                print("No encontrado\n")
+                if fileModOrigin not in self.no_encontrados:
+                    self.no_encontrados.append(fileModOrigin)
             if len(self.resultados) > 0:
                 if fileModOrigin is not None:
                     # print('1----')
-                    resultadoFiltrado = self.filtrarResultados(
+                    self.filtrarResultados(
                         self.current_mod,
                         fileModOrigin
                     )
                 else:
                     # print('2----')
-                    resultadoFiltrado = self.filtrarResultados(
+                    self.filtrarResultados(
                         self.current_mod
                     )
 
-                if resultadoFiltrado is None:
-                    print("No encontrado\n")
-                    if fileModOrigin not in self.no_encontrados:
-                        self.no_encontrados.append(fileModOrigin)
-                else:
-                    # totalPaginas = 4
-                    # itemPaginas = self.indice
-                    totalPaginas = resJSON["pagination"]["totalCount"] + 1
-                    itemPaginas = resJSON["pagination"]["index"]
+                # totalPaginas = 4
+                # itemPaginas = self.indice
+                totalPaginas = resJSON["pagination"]["totalCount"] + 1
+                itemPaginas = resJSON["pagination"]["index"]
+                # print(f'Continua buscando?:  {self.continueSearch}')
+                #
+                # print(
+                #         itemPaginas,
+                #         totalPaginas,
+                #         self.continueSearch
+                #     )
+                # print()
 
-                    # print()
-                    # print(resJSON["pagination"], self.current_mod)
-                    # print(
-                    #     self.current_mod,
-                    #     resJSON['pagination'],
-                    #     f'Cantidad Elementos: {len(self.resultados)}'
-                    # )
-                    # print(f'Continua buscando?:  {self.continueSearch}')
-
-                    if itemPaginas < totalPaginas and self.continueSearch:
-                        indice += 1
-                        self.search(mod_string, fileModOrigin, indice)
-                    else:
-                        print("Encontrado\n")
-                        if resultadoFiltrado not in self.mod_encontrados:
-                            self.mod_encontrados.append(resultadoFiltrado)
+                if itemPaginas < totalPaginas and self.continueSearch:
+                    indice += 1
+                    self.search(mod_string, fileModOrigin, indice)
 
     def comparar(self, modEncontrado, original):
         """
@@ -230,10 +244,17 @@ class AutoUpdate(object):
                         if 'modLoader' in i.keys()
                         if i['modLoader'] == 1
                     ][0]
+                # print()
+                # print(fileIndex)
+                # print()
                 fileIndex['modId'] = item['id']
                 fileIndex['name'] = item['name']
                 fileIndex['slug'] = item['slug']
                 fichero_retorno = fileIndex
+
+            if fichero_retorno not in self.mod_encontrados:
+                print("Encontrado")
+                self.mod_encontrados.append(fichero_retorno)
 
             self.cantidad_encontrado += 1
             self.continueSearch = False
@@ -243,52 +264,59 @@ class AutoUpdate(object):
             return None
 
     def download(self):
-        """Download and save mod file"""
-        print(f'{self.tiempo()}  Downloading mods')
+        """
+        Descarga y guarda el fichero del mod
+        """
         if self.key != "":
-            if len(self.mod_encontrados) > 0:
+            if len(self.mod_encontrados) == 0:
+                print("Lista de mods encontrados está Vacía.")
+            elif len(self.mod_encontrados) > 0:
+                print(f'{self.tiempo()}  Descargando mod')
                 for item in self.mod_encontrados:
-                    itemID = f'/v1/mods/{item["modId"]}'
-                    fileID = f'/files/{item["fileId"]}'
-                    url = self.url + itemID + fileID
+                    try:
+                        itemID = f'/v1/mods/{item["modId"]}'
+                        fileID = f'/files/{item["fileId"]}'
+                        url = self.url + itemID + fileID
 
-                    res = requests.get(
-                        url,
-                        headers=self.headers()['single']
-                    )
+                        res = requests.get(
+                                url,
+                                headers=self.headers()['single']
+                            )
 
-                    data = res.json()['data']
+                        data = res.json()['data']
 
-                    hashSha1 = data['hashes'][0]['value']
-                    filename = data['fileName']
-                    fileUrl = data['downloadUrl']
-                    size = data['fileLength']
+                        hashSha1 = data['hashes'][0]['value']
+                        filename = data['fileName']
+                        fileUrl = data['downloadUrl']
 
-                    requestMod = requests.get(
-                        fileUrl,
-                        headers=self.headers()['single']
-                    )
-                    # print(requestMod.status_code)
-                    ruta = self.save(
-                            filename,
-                            requestMod.content
-                        )
-                    self.check_integrity(ruta, hashSha1)
+                        requestMod = requests.get(
+                                fileUrl,
+                                headers=self.headers()['single']
+                            )
+                        # print(requestMod.status_code)
+                        ruta = self.save(
+                                filename,
+                                requestMod.content
+                            )
+                        self.check_integrity(ruta, hashSha1)
+                    except Exception:
+                        print('Error mod', item)
+                        elemento = item['filename'], item['modId']
+                        self.error_mod.append(elemento)
                 else:
                     if len(self.mod_encontrados) > 1:
                         print(f"\n{self.tiempo()}  Mods descargados en 'mods'")
                     else:
                         print(f"\n{self.tiempo()}  Mod descargado en 'mods'")
-                self.writeLog()
-
+            self.writeLog()
         else:
-            raise ValueError('Api Key not set.')
+            raise ValueError('LLave API no establecida.')
 
     def save(self, filename, content):
         """
         Guarda el mod encontrado en la carpeta 'mods'
         """
-        print("-_>")
+        print("___>")
         existe = os.path.exists('mods')
         if not existe:
             os.mkdir('mods')
@@ -324,6 +352,7 @@ class AutoUpdate(object):
         """
         Escribe LOGs de los mods encontrados y los no.
         """
+        # print(self.no_encontrados)
         econtrados = [f'{i["filename"]}\n' for i in self.mod_encontrados]
         no_econtrados = [f'{i}\n' for i in self.no_encontrados]
         with open("mods_actualizados.log", "w") as file:
@@ -341,10 +370,18 @@ class AutoUpdate(object):
         """
         Imprime los mods encontrados y la cantidad.
         """
-        return f'{self.mod_encontrados}\nEncontrados: {self.cantidad_encontrado}'
+        l1 = f'{self.mod_encontrados}'
+        l2 = '\nEncontrados: {self.cantidad_encontrado}'
+        return l1 + l2
 
     def showError(self):
+        """
+        Imprime los mods que presentaron errores al buscar.
+        """
         print("\n".join(map(str, self.error_mod)))
 
     def tiempo(self):
+        """
+        Retorna el tiempo actual en formato '%H:%M:%S - %d/%m/%Y'
+        """
         return datetime.strftime(datetime.now(), '%H:%M:%S - %d/%m/%Y')
