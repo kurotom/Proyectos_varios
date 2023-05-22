@@ -36,6 +36,6 @@ python update_mods_cli.py [-h] [-f FILENAME] [-m MOD] [-g GAMEVERSION] [-k 'apiK
 | -f FILENAME, --filename FILENAME | fichero de texto (`.txt`) con lista de todos los mods. |
 | -m MOD, --mod MOD | nombre del fichero del mod para actualizar. |
 | -g GAMEVERSION, --gameVersion GAMEVERSION | versión del juego. |
-| -k, --key | API key, entre comillas simples (`' '`). |
+| -k 'apiKey', --key 'apiKey' | API key, entre comillas simples (`' '`). |
 
 Para consultar la versión del juego ir a la [Java Edition version history](https://minecraft.fandom.com/wiki/Java_Edition_version_history)
