@@ -18,3 +18,4 @@ Contiene los proyectos de variados temas que he realizado en lenguaje Python y B
 * [gui_image_compress](https://github.com/kurotom/proyectos_varios/tree/gui_image_compress)
 * [scraping_Sismologia_cl](https://github.com/kurotom/proyectos_varios/tree/scraping_Sismologia_cl)
 * [scraping_web_to_pdf](https://github.com/kurotom/proyectos_varios/tree/scraping_web_to_pdf)
+* [pdf_to_image](https://github.com/kurotom/proyectos_varios/tree/pdf_to_image)
