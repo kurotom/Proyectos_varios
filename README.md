@@ -1,16 +1,17 @@
-# PyMoDoRo
+# PDF to Image
 
-Pomodoro escrito en Python, usando Tkinter.
-
+Aplicación GUI que convierte ficheros PDF en imágenes.
 
 # Uso
 
 1. Instalar los paquetes usado.
+
 ```
 $ pip install -r requirements.txt
 ```
 
-2. Ejecutar PyMoDoRo
+2. Ejecutar
+
 ```
-$ python pymodoro.py
+$ python pdf_to_image.py
 ```
