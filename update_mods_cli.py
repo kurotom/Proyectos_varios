@@ -37,7 +37,8 @@ def main():
             '-k',
             '--key',
             type=str,
-            help='key API'
+            help='key API',
+            required=True
         )
 
     args = parser.parse_args()
