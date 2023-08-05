@@ -2,7 +2,7 @@ import unittest
 import os
 import shutil
 
-from clase.AutoUpdateClass import AutoUpdate
+from auto_update_mods.AutoUpdateClass import AutoUpdate
 
 
 class AutoUpdateTestCase(unittest.TestCase):

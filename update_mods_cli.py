@@ -6,7 +6,7 @@ import argparse
 import re
 import threading
 
-from clase.AutoUpdateClass import AutoUpdate
+from auto_update_mods.AutoUpdateClass import AutoUpdate
 
 
 def main():
